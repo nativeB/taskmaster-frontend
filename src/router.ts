@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory, NavigationGuardNext, RouteLocationNormalized, RouteRecordRaw } from 'vue-router';
 import { check } from './api';
+import { useMainStore } from './store';
 
 async function requireAuth(
     to: RouteLocationNormalized,
@@ -7,6 +8,7 @@ async function requireAuth(
     next: NavigationGuardNext
   ): Promise<void> {
     //api call to check if user is authenticated
+    const store = useMainStore()
     const token = localStorage.getItem('token');
     if(!token) {
         next('/login');
@@ -14,7 +16,8 @@ async function requireAuth(
     }
 
     const isAuthenticated = await check();
-    if (isAuthenticated) {
+    if (isAuthenticated && isAuthenticated.auth) {
+        store.setAuth(isAuthenticated.auth)
       // User is authenticated, allow navigation
       next();
     } else {

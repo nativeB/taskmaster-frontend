@@ -1,74 +1,46 @@
 <template>
   <div class="kanban-board">
-    <div v-for="section in sections" :key="section.id" class="section">
+    <div v-for="section in store.sections" :key="section.id" class="section">
       <h2 class="section-title">{{ section.title }}</h2>
       <div class="tasks" @drop="dropTask($event, section.id)" @dragover.prevent>
         <div 
-          v-for="task in section.tasks" :key="task.id" 
+          v-for="task in section.tasks" :key="task._id" 
           class="task move" draggable="true" 
           @dragstart="dragTask($event, task, section.id)" 
           @click="selectedTask = task; 
-          showModal = true"
+          showViewModal = true"
         >
           {{ task.title }}
         </div>
 
-        <div v-if="section.id==='todo'" class="cursor-pointer task">
+        <div v-if="section.id==='todo'" class="cursor-pointer task" @click="showAddModal = true">
           Add Task
         </div>
       </div>
     </div>
-    <TaskModal :show="showModal" :task="selectedTask" @close="showModal=false" />
+    <ViewTaskModal :show="showViewModal" :task="selectedTask" @close="showViewModal=false" />
+    <AddTaskModal :show="showAddModal" @close="showAddModal=false" />
   </div>
 </template>
 
 <script lang="ts">
 import { useMainStore } from '@/store';
 import { Vue, Options } from 'vue-class-component';
-import TaskModal from "@/components/TaskModal.vue"
-interface Task {
-  id: number;
-  title: string;
-  status: string;
-}
-
-interface Section {
-  id: string;
-  title: string;
-  tasks: Task[];
-}
+import ViewTaskModal from "@/components/ViewTaskModal.vue"
+import AddTaskModal from "@/components/AddTaskModal.vue"
+import { Task } from '@/types';
 
 @Options({
   components: {
-    TaskModal
+    ViewTaskModal,
+    AddTaskModal
   }
 })
 export default class KanbanBoard extends Vue {
-  showModal = false
+  showAddModal = false
+  showViewModal = false
   selectedTask: Task | null = null 
-  private store  = useMainStore()
-
-  sections: Section[] = [
-    {
-      id: 'todo',
-      title: 'Todo',
-      tasks: [
-      // { id: 1, title: 'Task 1', status: 'todo' }
-      ],
-    },
-    {
-      id: 'inProgress',
-      title: 'In Progress',
-      tasks: [
-      ],
-    },
-    {
-      id: 'done',
-      title: 'Done',
-      tasks: [
-      ],
-    },
-  ];
+  store  = useMainStore()
 
   draggedTask: Task | null = null;
 
@@ -80,19 +52,19 @@ export default class KanbanBoard extends Vue {
   dropTask(event: DragEvent, sectionId: string): void {
     if (this.draggedTask) {
       const sourceSectionId = event.dataTransfer!.getData('text/plain');
-      const sourceSection = this.sections.find((section) => section.id === sourceSectionId);
-      const targetSection = this.sections.find((section) => section.id === sectionId);
+      const sourceSection = this.store.sections.find((section) => section.id === sourceSectionId);
+      const targetSection = this.store.sections.find((section) => section.id === sectionId);
 
       if (sourceSection && targetSection) {
-        sourceSection.tasks = sourceSection.tasks.filter((task) => task.id !== this.draggedTask!.id);
-        this.draggedTask.status = targetSection.id;
+        sourceSection.tasks = sourceSection.tasks.filter((task) => task._id !== this.draggedTask!._id);
+        this.draggedTask.status = targetSection.id as any;
         targetSection.tasks.push(this.draggedTask);
       }
 
       this.draggedTask = null;
     }
   }
-
+  
   // mounted get tasks
   mounted() {
     this.store.getTasks();

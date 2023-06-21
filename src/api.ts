@@ -70,8 +70,7 @@ export const createTask = async (task: Task) => {
         },
         body: JSON.stringify(task),
     });
-
-       const data = await res.json();
+    const data = await res.json();
 
     if(res.ok) {
         return data;

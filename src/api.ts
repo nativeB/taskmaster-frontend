@@ -61,10 +61,12 @@ export const register = async (email: string, password: string) => {
 
 // /task post put delete 
 export const createTask = async (task: Task) => {
-    const res = await fetch(`${baseUrl}/task`, {
+    const token = localStorage.getItem('token');
+    const res = await fetch(`${baseUrl}v1/task`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(task),
     });
@@ -79,10 +81,12 @@ export const createTask = async (task: Task) => {
 }
 
 export const updateTask = async (task: Task) => {
-    const res = await fetch(`${baseUrl}/task`, {
+    const token = localStorage.getItem('token');
+    const res = await fetch(`${baseUrl}v1/task`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(task),
     });
@@ -97,7 +101,13 @@ export const updateTask = async (task: Task) => {
 }
 
 export const deleteTask = async (id: string) => {
-    const res = await fetch(`${baseUrl}/task/${id}`, {
+    const token = localStorage.getItem('token');
+
+    const res = await fetch(`${baseUrl}v1/task/${id}`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        },
         method: 'DELETE',
     });
 
@@ -109,3 +119,24 @@ export const deleteTask = async (id: string) => {
 
     throw data;
 }
+
+// /tasks get
+export const getTasks = async () => {
+    const token = localStorage.getItem('token');
+    const res = await fetch(`${baseUrl}v1/task`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        },
+        method: 'GET',
+    });
+
+       const data = await res.json();
+
+    if(res.ok) {
+        return data;
+    }
+
+    throw data;
+}
+

@@ -1,9 +1,9 @@
-import { login, register } from "@/api";
-import { Item, User } from "@/types";
+import { getTasks, login, register } from "@/api";
+import { Item, Task, User } from "@/types";
 import { defineStore } from "pinia";
 
 export type RootState = {
-  items: Item[];
+  tasks: Task[];
   user: User | null;
   token: string | null;       
 };
@@ -15,6 +15,7 @@ export const useMainStore = defineStore({
       items: [],
       user: null,
       token: null,
+      tasks: []
     } as RootState),
 
   actions: {
@@ -31,6 +32,10 @@ export const useMainStore = defineStore({
         return await register(email, password);
     },
 
+    async getTasks(){
+        const data = await getTasks()
+        this.tasks = data.tasks 
+    }
 
   },
 });

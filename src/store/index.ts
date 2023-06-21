@@ -68,8 +68,7 @@ export const useMainStore = defineStore({
     },
     async createTask (task: Task) {
         const data = await createTask(task)
-        console.log('heee')
-        this.tasks.push(data)
+        this.tasks.push(data.task)
     }
   },
 });

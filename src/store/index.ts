@@ -1,8 +1,11 @@
-import { Item } from "@/types";
+import { login, register } from "@/api";
+import { Item, User } from "@/types";
 import { defineStore } from "pinia";
 
 export type RootState = {
   items: Item[];
+  user: User | null;
+  token: string | null;       
 };
 
 export const useMainStore = defineStore({
@@ -10,32 +13,24 @@ export const useMainStore = defineStore({
   state: () =>
     ({
       items: [],
+      user: null,
+      token: null,
     } as RootState),
 
   actions: {
-    createNewItem(item: Item) {
-      if (!item) return;
-
-      this.items.push(item);
+    async login(email: string, password: string) {
+        //api call
+        const data = await login(email, password);
+        this.token = data.token;
+        this.user = data.user;
+        localStorage.setItem("token", data.token)
+        return data
+    },
+    async register(email: string, password: string) {
+        //api call
+        return await register(email, password);
     },
 
-    updateItem(id: string, payload: Item) {
-      if (!id || !payload) return;
 
-      const index = this.findIndexById(id);
-
-    },
-
-    deleteItem(id: string) {
-      const index = this.findIndexById(id);
-
-      if (index === -1) return;
-
-      this.items.splice(index, 1);
-    },
-
-    findIndexById(id: string) {
-      return this.items.findIndex((item) => item.id === id);
-    },
   },
 });

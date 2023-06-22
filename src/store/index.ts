@@ -1,4 +1,4 @@
-import { createTask, getTasks, login, register, updateTask } from "@/api";
+import { createTask, deleteTask, getTasks, login, register, updateTask } from "@/api";
 import { Task, User } from "@/types";
 import { defineStore } from "pinia";
 
@@ -72,9 +72,16 @@ export const useMainStore = defineStore({
     },
     async updateTask (task: any) {
         const data = await updateTask(task)
-        const taskIndex = this.tasks.findIndex(task=>task._id === data.task._id);
+        const taskIndex = this.tasks.findIndex(theTask=>theTask._id === data.task._id);
         if(taskIndex > -1){
             this.tasks[taskIndex] = data.task
+        }
+    },
+    async deleteTask (taskId: any) {
+        const data = await deleteTask(taskId)
+        const taskIndex = this.tasks.findIndex(theTask=>theTask._id === taskId);
+        if(taskIndex > -1){
+            this.tasks.splice(taskIndex, 1)
         }
     }
   },

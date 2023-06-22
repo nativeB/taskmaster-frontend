@@ -111,7 +111,7 @@ export const deleteTask = async (id: string) => {
         method: 'DELETE',
     });
 
-       const data = await res.json();
+    const data = await res.json();
 
     if(res.ok) {
         return data;

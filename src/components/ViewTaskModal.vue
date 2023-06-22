@@ -48,7 +48,8 @@ export default class Modal extends Vue {
   }
 
   deleteTask(): void {
-    this.$emit('delete');
+    this.store.deleteTask(this.task._id)
+    this.closeModal()
   }
 
   updateTaskStatus(data: any) {

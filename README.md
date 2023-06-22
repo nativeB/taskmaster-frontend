@@ -2,17 +2,17 @@
 
 
 ## Project setup
-```
+
 requirement: nodejs, yarn
-```
+
 rename .env.example to .env
+
 note: if the port on taskmaster-backend is not 3000, change the VUE_APP_BASE_URL to the port of taskmaster-backend
-```
 ```
 yarn install
 ```
 
-### Compiles and hot-reloads for development
+### Compile and run  for development on your local machine
 ```
 yarn serve
 ```

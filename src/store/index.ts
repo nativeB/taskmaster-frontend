@@ -57,9 +57,9 @@ export const useMainStore = defineStore({
     async setAuth(auth:any){
         this.auth = auth
     },
-    async register(email: string, password: string) {
+    async register(email: string, password: string, confirmPassword: string) {
         //api call
-        return await register(email, password);
+        return await register(email, password, confirmPassword);
     },
 
     async getTasks(){

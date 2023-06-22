@@ -41,13 +41,13 @@ export const check = async () => {
     throw data;
 }
 
-export const register = async (email: string, password: string) => {
+export const register = async (email: string, password: string, confirmPassword: string) => {
     const res = await fetch(`${baseUrl}v1/auth/register`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, confirmPassword }),
     });
 
     const data = await res.json();

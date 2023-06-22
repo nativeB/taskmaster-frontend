@@ -1,4 +1,18 @@
 <template>
+  <div class="flex flex-col pt-4 gap-4 px-4">
+    <div class="flex w-full flex-row-reverse justify-between items-center ">
+      <div class="flex items-center gap-4">
+      <button @click="showAddModal = true" class="add-button flex items-center justify-center w-12 h-12 bg-gray-100 rounded-full focus:outline-none ">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+      </button>
+      <span class="text-sm font-bold cursor-pointer" @click="logout">Logout </span>
+    </div>
+      <h1 class="text-base font-bold">Task Master</h1>
+      <div></div>
+    </div>
   <div class="kanban-board">
     <div v-for="section in store.sections" :key="section.id" class="section">
       <h2 class="section-title">{{ section.title }}</h2>
@@ -13,13 +27,11 @@
           {{ task.title }}
         </div>
 
-        <div v-if="section.id==='todo'" class="cursor-pointer task" @click="showAddModal = true">
-          Add Task
-        </div>
       </div>
     </div>
     <ViewTaskModal :show="showViewModal" :task="selectedTask" @close="showViewModal=false" />
     <AddTaskModal :show="showAddModal" @close="showAddModal=false" />
+  </div>
   </div>
 </template>
 
@@ -59,10 +71,18 @@ export default class KanbanBoard extends Vue {
         sourceSection.tasks = sourceSection.tasks.filter((task) => task._id !== this.draggedTask!._id);
         this.draggedTask.status = targetSection.id as any;
         targetSection.tasks.push(this.draggedTask);
+        this.store.updateTask({
+          _id: this.draggedTask._id,
+          status: sectionId as any,
+        });
       }
 
       this.draggedTask = null;
     }
+  }
+  logout(){
+    localStorage.removeItem("token")
+    this.$router.push({name: "Login"})
   }
   
   // mounted get tasks

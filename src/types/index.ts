@@ -7,7 +7,7 @@ export type Item = {
 	title: string;
 	description: string;
 	userId: string;
-	status: "todo" | "inProgress" | "done";
+	status: "todo" | "inProgress" | "complete";
 }
 
 export type User = {

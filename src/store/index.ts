@@ -24,7 +24,7 @@ export const useMainStore = defineStore({
     sections(state){
         const todo = state.tasks.filter(task=>task.status === 'todo')
         const inProgress = state.tasks.filter(task=>task.status === 'inProgress')
-        const done = state.tasks.filter(task=>task.status === 'done')
+        const complete = state.tasks.filter(task=>task.status === 'complete')
         // { id: 1, title: 'Task 1', status: 'todo' }
         return [
             {
@@ -38,9 +38,9 @@ export const useMainStore = defineStore({
               tasks: inProgress,
             },
             {
-              id: 'done',
-              title: 'Done',
-              tasks: done,
+              id: 'complete',
+              title: 'Complete',
+              tasks: complete,
             },
           ];
     }

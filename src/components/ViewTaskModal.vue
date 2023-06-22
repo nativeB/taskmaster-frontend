@@ -2,16 +2,16 @@
    <div class="modal" v-if="show">
     <div class="modal-content">
       <div class="modal-header">
-        <h3 class="modal-title">{{ task.title }}</h3>
+        <h3 class="modal-title text-ellipsis overflow-hidden whitespace-nowrap">{{ task.title }}</h3>
         <button class="modal-close" @click="closeModal">x</button>
       </div>
-      <p class="modal-description">{{ task.description }}</p>
+      <p class="modal-description max-h-[30rem] overflow-auto">{{ task.description }}</p>
       <div class="modal-actions">
         <label for="status" class="modal-label">Status:</label>
         <select v-model="task.status" id="status" class="modal-dropdown" @change="updateTaskStatus(task.status)">
           <option value="todo">To Do</option>
           <option value="inProgress">In Progress</option>
-          <option value="done">Done</option>
+          <option value="complete">Complete</option>
         </select>
         <button class="modal-delete" @click="deleteTask">Delete</button>
       </div>

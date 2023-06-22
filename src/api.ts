@@ -80,14 +80,15 @@ export const createTask = async (task: Task) => {
 }
 
 export const updateTask = async (task: Task) => {
+    const {_id, ...payload} = task
     const token = localStorage.getItem('token');
-    const res = await fetch(`${baseUrl}v1/task`, {
+    const res = await fetch(`${baseUrl}v1/task/${_id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(task),
+        body: JSON.stringify(payload),
     });
 
        const data = await res.json();

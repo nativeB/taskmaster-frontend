@@ -1,4 +1,4 @@
-import { createTask, getTasks, login, register } from "@/api";
+import { createTask, getTasks, login, register, updateTask } from "@/api";
 import { Task, User } from "@/types";
 import { defineStore } from "pinia";
 
@@ -69,6 +69,13 @@ export const useMainStore = defineStore({
     async createTask (task: Task) {
         const data = await createTask(task)
         this.tasks.push(data.task)
+    },
+    async updateTask (task: any) {
+        const data = await updateTask(task)
+        const taskIndex = this.tasks.findIndex(task=>task._id === data.task._id);
+        if(taskIndex > -1){
+            this.tasks[taskIndex] = data.task
+        }
     }
   },
 });

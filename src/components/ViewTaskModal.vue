@@ -8,7 +8,7 @@
       <p class="modal-description">{{ task.description }}</p>
       <div class="modal-actions">
         <label for="status" class="modal-label">Status:</label>
-        <select v-model="task.status" id="status" class="modal-dropdown">
+        <select v-model="task.status" id="status" class="modal-dropdown" @change="updateTaskStatus(task.status)">
           <option value="todo">To Do</option>
           <option value="inProgress">In Progress</option>
           <option value="done">Done</option>
@@ -20,6 +20,7 @@
 </template>
 
 <script lang="ts">
+import { useMainStore } from '@/store';
 import { Vue, Options } from 'vue-class-component';
 
 @Options({
@@ -40,6 +41,7 @@ import { Vue, Options } from 'vue-class-component';
 export default class Modal extends Vue {
   task: any;
   show!: boolean;
+  private store = useMainStore()
 
   closeModal(): void {
     this.$emit('close');
@@ -47,6 +49,13 @@ export default class Modal extends Vue {
 
   deleteTask(): void {
     this.$emit('delete');
+  }
+
+  updateTaskStatus(data: any) {
+   this.store.updateTask({
+    _id: this.task._id,
+    status: data
+   })
   }
 }
 </script>
